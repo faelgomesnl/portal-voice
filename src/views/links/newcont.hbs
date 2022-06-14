@@ -1,0 +1,77 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+
+            <div class="card">
+                <div class="card-body">
+                    <form action="/links/newcont" method="POST">                        
+                        
+                        
+                        
+                        <div class="form-group">
+                            <select class="select-css" name="login" id="list" onChange="update()">                                
+                                <option selected disabled>Escolha o Usuário </option>
+                                
+                                {{#each lista}}                                    
+                                    <option value="{{CODLOGIN}}">
+                                                {{NOMEUSU}}
+                                    </option>                                   
+                                    
+                                {{/each}}
+                            </select>
+                        </div>     
+
+                        <div class="form-group">
+                            <select class="select-css" name="contratos" id="list2" onChange="update2()">                                
+                                <option selected disabled>Escolha um Contrato </option>
+                                
+                                {{#each cont}}                                    
+                                    <option id="{{NUMCONTRATO}}">
+                                                {{NUMCONTRATO}} - {{NOMEPARC}}
+                                    </option>                                   
+                                    
+                                {{/each}}
+                            </select>
+                        </div> 
+
+                        <input hidden id="numcontrat" name="numcontrat" required>
+                        
+                        <div class="form-group">
+                            <button class="btn btn-success btn-block">
+                                Registrar Contrato
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{!-- RECEBE O VALOR INFORMADO NO SELECT A TRIBUI A INPUT PARA REGISTRAR O CODPARC --}}
+<script type="text/javascript">   
+    
+    
+    function update() {
+				var select = document.getElementById('list');
+				var option = select.options[select.selectedIndex];
+
+				document.getElementById('value').value = option.value;
+                console.log(document.getElementById('value').value = option.text)	
+
+                //document.getElementById('numcontrat').value = option.id;			
+			}
+    
+    //insere o código do contato no respectivo input
+            function update2(){
+                var select = document.getElementById('list2'); 
+				var option = select.options[select.selectedIndex];
+                var novo= option.id
+                document.getElementById('numcontrat').value= novo;
+            }
+
+
+
+			
+		</script>

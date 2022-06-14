@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/signin">
+      {{!-- <i class="fas fa-link"></i>  --}}
+      <img src="/img/PNG-e1610632130478.png" alt="Logo Fazt" height="90" width="129">
+    </a>
+    <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        
+        {{#if user.ADMINISTRADOR}}
+
+          <li class="nav-item">
+           <a class="nav-link" href="/links/allogin">Usuários</a>
+          </li>  
+
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+          Cadastros
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/links/newuser">Cadastro Usuários</a>
+            <a class="dropdown-item" href="/links/newcont">Cadastro Contratos</a>            
+          </div>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>   
+        </li>
+          {{else}}  
+        {{#if user.CONT_OI}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+          Ordem De Serviço
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/links">OS Abertas</a>
+            <a class="dropdown-item" href="/links/osclose">OS Fechadas</a>
+            <a class="dropdown-item" href="/links/all">Lista Geral</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/links/orderservs">Abertura De OS</a>
+          </div>
+        </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+          Configurações
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {{!-- <a class="dropdown-item" href="/links">Dados Usuário</a>
+            <div class="dropdown-divider"></div> --}}
+            <a class="dropdown-item" href="/links/password">Alterar Senha</a>
+          </div>
+        </li> 
+
+         <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>         
+        {{else}}
+        {{#if user}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+          Ordem De Serviço
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/links">OS Abertas</a>
+            <a class="dropdown-item" href="/links/osclose">OS Fechadas</a>
+            <a class="dropdown-item" href="/links/all">Lista Geral</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/links/orderserv">Abertura De OS</a>
+          </div>
+        </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+          Configurações
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {{!-- <a class="dropdown-item" href="/links">Dados Usuário</a>
+            <div class="dropdown-divider"></div> --}}
+            <a class="dropdown-item" href="/links/password">Alterar Senha</a>
+          </div>
+        </li> 
+
+         <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {{else}}
+        <li class="nav-item">
+          <a class="nav-link" href="/signin">Login</a>
+        </li>
+        {{/if}}
+        {{/if}}
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,40 @@
+{
+  "name": "sucesso_total",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "ejs": "^1.0.0",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^1.1.0",
+    "express-handlebars": "^3.0.0",
+    "express-mysql-session": "^2.0.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^5.3.0",
+    "forever": "^4.0.1",
+    "moment": "^2.29.1",
+    "morgan": "^1.9.1",
+    "mssql": "^6.2.1",
+    "mssql-session-store": "^1.0.0",
+    "multer": "^1.4.3",
+    "mysql": "^2.16.0",
+    "node-static": "^0.7.11",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "serve-favicon": "^2.5.0",
+    "timeago.js": "^4.0.0-beta.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
