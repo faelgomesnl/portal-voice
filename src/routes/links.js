@@ -151,7 +151,7 @@ router.get('/orderserv', isLoggedIn, async (req, res) => {
     INNER JOIN sankhya.TGFPRO PD ON (PD.CODPROD=PS.CODPROD)
     WHERE L.ID_LOGIN = ${idlogin}
     AND PS.SITPROD IN ('A','B')
-    AND PD.USOPROD IN ('S', 'R')
+    AND PD.USOPROD IN ('S')
     order by PRODUTO`);
 
     //produtos
