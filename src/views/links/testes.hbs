@@ -1,452 +1,564 @@
- 
-  <link rel="stylesheet" href="/css/styles.css">  
+<link rel="stylesheet" href="/css/styles.css">
 
 {{#if user.CONT_OI}}
 {{!-- USUÁRIO TJDF --}}
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-md-5 mx-auto">
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
 
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/links/orderservs" method="POST" id="frm_" enctype="multipart/form-data" onsubmit="return valida_form(this)">                    
-                            
+            <div class="card">
+                <div class="card-body">
+                    <form action="/links/orderservs" method="POST" id="frm_" enctype="multipart/form-data"
+                        onsubmit="return valida_form(this)">
 
-                            <div class="form-group">
-                                <textarea type="text" name="texto" class="form-control" placeholder="Informe a descrição e os respectivos contatos">Empresa : TJDFT ||
+
+                        <div class="form-group">
+                            <textarea type="text" name="texto" class="form-control"
+                                placeholder="Informe a descrição e os respectivos contatos">Empresa : TJDFT ||
 Solicitante :  ||
 E-mail: nurede@tjdft.jus.br ||
 Contato : 6131034070 ||
 Unidade :  ||
 OS-TJDFT: N/A
 Descrição do Pedido:</textarea>
-                            </div>                      
+                        </div>
 
-                            <div class="form-group">
-                                <select class="select-css" name="contrato" id="list" onChange="update()" >
-                                    <option selected disabled>Contrato/ Parceiro </option>  
-                                    <option selected disabled>Escolha Uma Localidade </option>
-                                    
-                                    {{#each geral}}                                    
-                                        <option value="{{NUM_CONTRATO}}" 
-                                                id="{{CODPARC}}" 
-                                                title="{{CODPROD}}"
-                                                ren="{{VALORTEMPO}}" 
-                                                ren2="{{CIDADE}}"
-                                                ren3="{{LOGRADOURO}}"
-                                                ren4="{{AD_LOCALIDADE}}"
-                                                ren5="{{CARTEIRA}}">
-                                                    {{NOMEPARC}} - {{AD_LOCALIDADE}}
-                                        </option>  
-                                    {{/each}}
-                                </select>
-                            </div>                           
+                        <div class="form-group">
+                            <select class="select-css" name="contrato" id="list" onChange="update()">
+                                <option selected disabled>Contrato/ Parceiro </option>
+                                <option selected disabled>Escolha Uma Localidade </option>
 
-                             {{!-- escolha de produto --}}
-                            <div class="form-group" hidden>
-                                <select class="select-css" name="produto" id="list3" onChange="update()">   
-                                    {{#each prod}}                                    
-                                        <option value="{{PRODUTO}}"
-                                        id="{{PRODUTO}}" >
-                                                    {{PRODUTO}}
-                                        </option>   
-                                    {{/each}}
-                                </select>
-                            </div> 
-
-                            <div class="form-group" id="updiv">
-                                <select class="select-css" name="contato" id="aqui2" onclick="update4()" required> 
-                                    <option value="" disabled selected>Escolha Um Produto</option> 
-                                </select>
-                            </div>  
-
-                            {{!-- escolha de serviço --}}
-                            <div class="form-group" hidden>
-                                <select class="select-css" name="produto" id="list4" onChange="update()">   
-                                    {{#each prod1}}                                    
-                                        <option value="{{PRODUTO}}"
-                                        id="{{PRODUTO}}" >
-                                                    {{PRODUTO}}
-                                        </option>   
-                                    {{/each}}
-                                </select>
-                            </div>
-
-                             {{!-- escolha de contato --}}
-                             <div class="form-group" hidden>
-                                <select class="select-css" name="contato" id="list2" onChange="update()" >    
-                                    
-                                    {{#each cont}}                                    
-                                        <option value="{{CONTATO}}"
-                                        id="{{NOME}}" >
-                                                    {{CONTATO}}
-                                        </option>  
-                                    {{/each}}
-                                </select>
-                            </div>                            
-
-                            <div class="form-group" id="updiv">
-                                <select class="select-css" name="contato" id="aqui" onclick="update2()" required> 
-                                    <option value="" disabled selected>Escolha Contato Responsável</option> 
-                                </select>
-                            </div> 
-
-                             <div class="form-group" >                            
-                            <select class="select-css" name="contato" id="list5" onChange="update2()"> 
-                                <option value="" disabled selected>Defina Criticidade</option>  
-                                <option id="1" >Criticidade 1</option>
-                                <option id="2" >Criticidade 2</option>
-                                <option id="3" >Criticidade 3</option>
-                                <option id="4" >Criticidade 4</option>
-                                <option id="5" >Criticidade 5</option>                                
+                                {{#each geral}}
+                                <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
+                                    ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}"
+                                    ren4="{{AD_LOCALIDADE}}" ren5="{{CARTEIRA}}">
+                                    {{NOMEPARC}} - {{AD_LOCALIDADE}}
+                                </option>
+                                {{/each}}
                             </select>
-                        </div> 
+                        </div>
 
-                        <div class="form-group" >                            
-                            <select class="select-css" name="contato" id="list6" onChange="update2()"> 
-                                <option value="" disabled selected>Defina Categoria</option>  
-                                <option id="1" >Configuração & Ajuste</option>
-                                <option id="2" >Falha em Aparelho</option>
-                                <option id="6" >Falha Softphone</option> 
-                                <option id="3" >Falha no Link de Voz</option>
-                                <option id="4" >Falha na Plataforma</option>
-                                <option id="5" >Informação</option>                                
+                        {{!-- escolha de produto --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list3" onChange="update()">
+                                {{#each prod1}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
                             </select>
-                        </div> 
+                        </div>
 
-                            {{!-- armazena valores envio req.body insert  --}}
-                            <div class="form-group">
-                                <input hidden id="value" required>
-                                <input hidden id="codparc" name="codparc" required>
-                                <input hidden id="codprod" name="codprod" required> 
-                                <input hidden id="codserv" name="codserv" > 
-                                <input hidden id="atualiza" name="atualiza" required>     
-                                <input hidden id="sla" name="sla" required> 
-                                <input hidden id="categoria" name="categoria" required> 
-                                <input hidden id="carteira" name="carteira" required>     
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui2" onclick="update4()" required>
+                                <option value="" disabled selected>Escolha Um Produto</option>
+                            </select>
+                        </div>
 
-                                {{!-- exibição enderaço --}} 
-                                    <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>  
-                                    <input type="text" id="logradouro" name="logradouro" disabled="disabled" style='width:100%'>  
-                                    <input type="text" id="parceiro" name="parceiro" disabled="disabled" style='width:100%'>
-                            </div> 
-                            
-                            <div class="form-group">
-                                <button class="btn btn-success btn-block" onclick="valida()">
-                                    Gerar Ordem De Serviço
-                                </button>
-                            </div>
-                        </form>                   
-                        
-                    </div>
+                        {{!-- escolha de serviço --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list4" onChange="update()">
+                                {{#each prod}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        {{!-- escolha de contato --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="contato" id="list2" onChange="update()">
+
+                                {{#each cont}}
+                                <option value="{{CONTATO}}" id="{{NOME}}">
+                                    {{CONTATO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui" onclick="update2()" required>
+                                <option value="" disabled selected>Escolha Contato Responsável</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="select-css" name="contato" id="list5" onChange="update2()">
+                                <option value="" disabled selected>Defina Criticidade</option>
+                                <option id="1">Criticidade 1</option>
+                                <option id="2">Criticidade 2</option>
+                                <option id="3">Criticidade 3</option>
+                                <option id="4">Criticidade 4</option>
+                                <option id="5">Criticidade 5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="select-css" name="contato" id="list6" onChange="update2()">
+                                <option value="" disabled selected>Defina Categoria</option>
+                                <option id="1">Configuração & Ajuste</option>
+                                <option id="2">Falha em Aparelho</option>
+                                <option id="6">Falha Softphone</option>
+                                <option id="3">Falha no Link de Voz</option>
+                                <option id="4">Falha na Plataforma</option>
+                                <option id="5">Informação</option>
+                            </select>
+                        </div>
+
+                        {{!-- armazena valores envio req.body insert --}}
+                        <div class="form-group">
+                            <input hidden id="value" required>
+                            <input hidden id="codparc" name="codparc" required>
+                            <input hidden id="codprod" name="codprod" required>
+                            <input hidden id="codserv" name="codserv">
+                            <input hidden id="atualiza" name="atualiza" required>
+                            <input hidden id="sla" name="sla" required>
+                            <input hidden id="categoria" name="categoria" required>
+                            <input hidden id="carteira" name="carteira" required>
+
+                            {{!-- exibição enderaço --}}
+                            <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
+                            <input type="text" id="logradouro" name="logradouro" disabled="disabled" style='width:100%'>
+                            <input type="text" id="parceiro" name="parceiro" disabled="disabled" style='width:100%'>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-success btn-block" onclick="valida()">
+                                Gerar Ordem De Serviço
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
-
         </div>
-    </div>
 
-{{else}} 
+    </div>
+</div>
+
+{{else}}
+{{!-- USUÁRIO ALGAR --}}
+{{#if user.AD_ALGARUSER}}
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+
+            <div class="card">
+                <div class="card-body">
+                    <form action="/links/order-algar" method="POST" id="frm_" enctype="multipart/form-data"
+                        onsubmit="return valida_form(this)">
+
+                        <div class="form-group">
+                            <textarea type="text" name="texto" class="form-control"
+                                placeholder="Informe a descrição e os respectivos contatos">Nome do Cliente Algar : 
+Nome do Usuário :  
+E-mail do Usuário : 
+Ramal : 
+Opção de Contato (Celular) :  
+Problema :
+                                </textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="select-css" name="contrato" id="list" onChange="update()">
+                                <option selected disabled>Contrato/ Parceiro </option>
+                                <option selected disabled>Escolha Uma Localidade </option>
+
+                                {{#each geral}}
+                                <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
+                                    ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}" ren4="{{NOMEPARC}}"
+                                    ren5="{{CARTEIRA}}">
+                                    {{NOMEPARC}} - {{AD_LOCALIDADE}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        {{!-- escolha de produto --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list3" onChange="update()">
+                                {{#each prod1}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui2" onclick="update4()" required>
+                                <option value="" disabled selected>Escolha Um Produto</option>
+                            </select>
+                        </div>
+
+                        {{!-- escolha de serviço --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list4" onChange="update()">
+                                {{#each prod}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        {{!-- escolha de contato --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="contato" id="list2" onChange="update()">
+
+                                {{#each cont}}
+                                <option value="{{CONTATO}}" id="{{NOME}}">
+                                    {{CONTATO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui" onclick="update2()" required>
+                                <option value="" disabled selected>Escolha Contato Responsável</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="select-css" name="contato" id="list5" onChange="update2()">
+                                <option value="" disabled selected>Defina Criticidade</option>
+                                <option id="1">Criticidade 1</option>
+                                <option id="2">Criticidade 2</option>
+                                <option id="3">Criticidade 3</option>
+                            </select>
+                        </div>
+
+                        {{!-- armazena valores envio req.body insert --}}
+                        <div class="form-group">
+                            <input hidden id="value" required>
+                            <input hidden id="codparc" name="codparc" required>
+                            <input hidden id="codprod" name="codprod" required>
+                            <input hidden id="codserv" name="codserv">
+                            <input hidden id="atualiza" name="atualiza" required>
+                            <input hidden id="sla" name="sla">
+                            <input hidden id="carteira" name="carteira" required>
+
+                            {{!-- exibição enderaço --}}
+                            <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
+                            <input type="text" id="logradouro" name="logradouro" disabled="disabled" style='width:100%'>
+                            <input type="text" id="parceiro" name="parceiro" disabled="disabled" style='width:100%'>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-success btn-block" onclick="valida()">
+                                Gerar Ordem De Serviço
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{else}}
 {{!-- USUÁRIOS SEM Exceções --}}
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-md-5 mx-auto">
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
 
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/links/orderserv" method="POST" id="frm_" enctype="multipart/form-data" onsubmit="return valida_form(this)">                    
-                            
+            <div class="card">
+                <div class="card-body">
+                    <form action="/links/orderserv" method="POST" id="frm_" enctype="multipart/form-data"
+                        onsubmit="return valida_form(this)">
 
-                            <div class="form-group">
-                                <textarea type="text" name="texto" class="form-control" placeholder="Informe a descrição e os respectivos contatos"></textarea>
-                            </div>                      
 
-                            <div class="form-group">
-                                <select class="select-css" name="contrato" id="list" onChange="update()" >
-                                    <option selected disabled>Contrato/ Parceiro </option>  
-                                    <option selected disabled>Escolha Uma Localidade </option>
-                                    
-                                    {{#each geral}}                                    
-                                        <option value="{{NUM_CONTRATO}}" 
-                                                id="{{CODPARC}}" 
-                                                title="{{CODPROD}}"
-                                                ren="{{VALORTEMPO}}" 
-                                                ren2="{{CIDADE}}"
-                                                ren3="{{LOGRADOURO}}"
-                                                ren4="{{NOMEPARC}}"
-                                                ren5="{{CARTEIRA}}">
-                                                    {{NOMEPARC}} - {{AD_LOCALIDADE}}
-                                        </option>  
-                                    {{/each}}
-                                </select>
-                            </div>                           
+                        <div class="form-group">
+                            <textarea type="text" name="texto" class="form-control"
+                                placeholder="Informe a descrição e os respectivos contatos"></textarea>
+                        </div>
 
-                             {{!-- escolha de produto --}}
-                            <div class="form-group" hidden>
-                                <select class="select-css" name="produto" id="list3" onChange="update()">   
-                                    {{#each prod}}                                    
-                                        <option value="{{PRODUTO}}"
-                                        id="{{PRODUTO}}" >
-                                                    {{PRODUTO}}
-                                        </option>   
-                                    {{/each}}
-                                </select>
-                            </div> 
+                        <div class="form-group">
+                            <select class="select-css" name="contrato" id="list" onChange="update()">
+                                <option selected disabled>Contrato/ Parceiro </option>
+                                <option selected disabled>Escolha Uma Localidade </option>
 
-                            <div class="form-group" id="updiv">
-                                <select class="select-css" name="contato" id="aqui2" onclick="update4()" required> 
-                                    <option value="" disabled selected>Escolha Um Produto</option> 
-                                </select>
-                            </div>  
+                                {{#each geral}}
+                                <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
+                                    ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}" ren4="{{NOMEPARC}}"
+                                    ren5="{{CARTEIRA}}">
+                                    {{NOMEPARC}} - {{AD_LOCALIDADE}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
 
-                            {{!-- escolha de serviço --}}
-                            <div class="form-group" hidden>
-                                <select class="select-css" name="produto" id="list4" onChange="update()">   
-                                    {{#each prod1}}                                    
-                                        <option value="{{PRODUTO}}"
-                                        id="{{PRODUTO}}" >
-                                                    {{PRODUTO}}
-                                        </option>   
-                                    {{/each}}
-                                </select>
-                            </div>
+                        {{!-- escolha de produto --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list3" onChange="update()">
+                                {{#each prod1}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
 
-                             {{!-- escolha de contato --}}
-                             <div class="form-group" hidden>
-                                <select class="select-css" name="contato" id="list2" onChange="update()" >    
-                                    
-                                    {{#each cont}}                                    
-                                        <option value="{{CONTATO}}"
-                                        id="{{NOME}}" >
-                                                    {{CONTATO}}
-                                        </option>  
-                                    {{/each}}
-                                </select>
-                            </div> 
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui2" onclick="update4()" required>
+                                <option value="" disabled selected>Escolha Um Produto</option>
+                            </select>
+                        </div>
 
-                            <div class="form-group" id="updiv">
-                                <select class="select-css" name="contato" id="aqui" onclick="update2()" required> 
-                                    <option value="" disabled selected>Escolha Contato Responsável</option> 
-                                </select>
-                            </div> 
+                        {{!-- escolha de serviço --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="produto" id="list4" onChange="update()">
+                                {{#each prod}}
+                                <option value="{{PRODUTO}}" id="{{PRODUTO}}">
+                                    {{PRODUTO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
 
-                            {{!-- armazena valores envio req.body insert  --}}
-                            <div class="form-group">
-                                <input hidden id="value" required>
-                                <input hidden id="codparc" name="codparc" required>
-                                <input hidden id="codprod" name="codprod" required> 
-                                <input hidden id="codserv" name="codserv" > 
-                                <input hidden id="atualiza" name="atualiza" required>     
-                                <input hidden id="sla" name="sla" > 
-                                <input hidden id="carteira" name="carteira" required>     
+                        {{!-- escolha de contato --}}
+                        <div class="form-group" hidden>
+                            <select class="select-css" name="contato" id="list2" onChange="update()">
 
-                                {{!-- exibição enderaço --}} 
-                                    <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>  
-                                    <input type="text" id="logradouro" name="logradouro" disabled="disabled" style='width:100%'>  
-                                    <input type="text" id="parceiro" name="parceiro" disabled="disabled" style='width:100%'>
-                            </div> 
-                            
-                            <div class="form-group">
-                                <button class="btn btn-success btn-block" onclick="valida()">
-                                    Gerar Ordem De Serviço
-                                </button>
-                            </div>
-                        </form>                   
-                        
-                    </div>
+                                {{#each cont}}
+                                <option value="{{CONTATO}}" id="{{NOME}}">
+                                    {{CONTATO}}
+                                </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="updiv">
+                            <select class="select-css" name="contato" id="aqui" onclick="update2()" required>
+                                <option value="" disabled selected>Escolha Contato Responsável</option>
+                            </select>
+                        </div>
+
+                        {{!-- armazena valores envio req.body insert --}}
+                        <div class="form-group">
+                            <input hidden id="value" required>
+                            <input hidden id="codparc" name="codparc" required>
+                            <input hidden id="codprod" name="codprod" required>
+                            <input hidden id="codserv" name="codserv">
+                            <input hidden id="atualiza" name="atualiza" required>
+                            <input hidden id="sla" name="sla">
+                            <input hidden id="carteira" name="carteira" required>
+
+                            {{!-- exibição enderaço --}}
+                            <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
+                            <input type="text" id="logradouro" name="logradouro" disabled="disabled" style='width:100%'>
+                            <input type="text" id="parceiro" name="parceiro" disabled="disabled" style='width:100%'>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-success btn-block" onclick="valida()">
+                                Gerar Ordem De Serviço
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
+{{/if}}
 {{/if}}
 
 {{!-- RECEBE O VALOR INFORMADO NO SELECT A TRIBUI A INPUT PARA REGISTRAR O CODPARC --}}
-<script type="text/javascript"> 
+<script type="text/javascript">
 
-function valida(){
-    if(document.getElementById("codprod").value == ""){
-        alert('Por favor, selecione um Produto');
-        document.getElementById("codprod").focus();
-    return false    }
-    //if(document.getElementById("codserv").value == ""){
-      //  alert('Por favor, selecione um Serviço');
-     //   document.getElementById("codserv").focus();
-    //return false    }
-    if(document.getElementById("atualiza").value == ""){
-        alert('Por favor, selecione um Contato');
-        document.getElementById("atualiza").focus();
-    return false    }
+    function valida() {
+        if (document.getElementById("codprod").value == "") {
+            alert('Por favor, selecione um Produto');
+            document.getElementById("codprod").focus();
+            return false
+        }
+        //if(document.getElementById("codserv").value == ""){
+        //  alert('Por favor, selecione um Serviço');
+        //   document.getElementById("codserv").focus();
+        //return false    }
+        if (document.getElementById("atualiza").value == "") {
+            alert('Por favor, selecione um Contato');
+            document.getElementById("atualiza").focus();
+            return false
+        }
     }
 
     function update() {
-				var select = document.getElementById('list'); 
-				var option = select.options[select.selectedIndex];
+        var select = document.getElementById('list');
+        var option = select.options[select.selectedIndex];
 
-                //busca valor contrato
-                var contrato = option.value;
-                var contr=contrato.toString();
-                //console.log('valor contrato')
-                //console.log(contr)   
-                
-                document.getElementById('value').value= option.value;
-				document.getElementById('codparc').value = option.id;
-                document.getElementById('codprod').value = option.title; 
+        //busca valor contrato
+        var contrato = option.value;
+        var contr = contrato.toString();
+        //console.log('valor contrato')
+        //console.log(contr)   
 
-                //busca o sla/ carteira referente ao contrato
+        document.getElementById('value').value = option.value;
+        document.getElementById('codparc').value = option.id;
+        document.getElementById('codprod').value = option.title;
 
-                var ren = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren');
-                var ren5 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren5');
+        //busca o sla/ carteira referente ao contrato
 
-                document.getElementById('sla').value = ren
-                document.getElementById('carteira').value = ren5
-                
-                 //lista endereço da localidade escolhida
-                 var ren2 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren2');
-                var ren3 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren3');
-                var ren4 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren4');
+        var ren = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren');
+        var ren5 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren5');
 
-                document.getElementById('cidade').value = ren2
-                document.getElementById('logradouro').value = ren3
-                document.getElementById('parceiro').value = ren4
+        document.getElementById('sla').value = ren
+        document.getElementById('carteira').value = ren5
 
+        //lista endereço da localidade escolhida
+        var ren2 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren2');
+        var ren3 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren3');
+        var ren4 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren4');
 
-                //busca valor dos contatos
-                var select = document.getElementById('list2');                                              
-				var option = select.options[select.selectedIndex];
-                var contatos = option.value
-
-                //console.log('select contatos')
-                //console.log(contatos) 
-
-                const languagesList = contatos
-
-                //console.log('impressao lista contatos languagesList')
-                    //console.log(languagesList) 
-                
-                //pega o select referente ao contato
-                var select = document.getElementById("list2");
-
-                //cria uma lista vazia 
-                var vlroption = []
-
-                //le o select e pega somente os valores e adiciona em uma nova lista                
-                for (i = 0; i < select.length; i = i + 1) {               
-                    vlroption.push(select.options[i].value)                
-                }
-
-                // altera o contato a medida que muda localidade.
-                var sel = document.getElementById('aqui');
-                for (i = sel.length - 1; i >= 0; i--) {
-                    sel.options.remove(i);
-                }   
-
-                //le os dados que foram armazenados e insere na lista
-                //console.log("Lista Preenchida")
-                for (k =0; k < vlroption.length; k = k + 1){
-                        //console.log(vlroption[k])
-                            if(vlroption[k].match(contr)){
-                            //console.log(vlroption[k])
-                            
-                            //insere os itens no select option
-                            var option = new Option(vlroption[k], vlroption[k]);
-                                    var select = document.getElementById("aqui");
-                                    select.add(option);
-                        }
-                }
-
-                //pega o select referente ao produto
-                var select = document.getElementById("list3");
-                //cria uma lista vazia 
-                var vlroption = []
-
-                //le o select e pega somente os valores e adiciona em uma nova lista
-                for (i = 0; i < select.length; i = i + 1) {               
-                    vlroption.push(select.options[i].value)                
-                }
-
-                // altera o contato a medida que muda produto.
-                var sel = document.getElementById('aqui2');
-                for (i = sel.length - 1; i >= 0; i--) {
-                    sel.options.remove(i);
-                }  
-
-                //le os dados que foram armazenados e insere na lista
-               // console.log("Lista Preenchida")
-                for (k =0; k < vlroption.length; k = k + 1){
-                            if(vlroption[k].match(contr)){
-                            //console.log(vlroption[k])
-                            
-                        //insere os itens no select option
-                        var option = new Option(vlroption[k], vlroption[k]);
-                                var select = document.getElementById("aqui2");
-                                select.add(option);
-                    }
-                }
+        document.getElementById('cidade').value = ren2
+        document.getElementById('logradouro').value = ren3
+        document.getElementById('parceiro').value = ren4
 
 
-                 //pega o select referente ao serviço
-                var select = document.getElementById("list4");
-                //cria uma lista vazia 
-                var vlroption = []
+        //busca valor dos contatos
+        var select = document.getElementById('list2');
+        var option = select.options[select.selectedIndex];
+        var contatos = option.value
 
-                //le o select e pega somente os valores e adiciona em uma nova lista
-                for (i = 0; i < select.length; i = i + 1) {               
-                    vlroption.push(select.options[i].value)                
-                }
+        //console.log('select contatos')
+        //console.log(contatos) 
 
-                // altera o contato a medida que muda produto.
-                var sel = document.getElementById('aqui3');
-                for (i = sel.length - 1; i >= 0; i--) {
-                    sel.options.remove(i);
-                }  
+        const languagesList = contatos
 
-                //le os dados que foram armazenados e insere na lista
-                //console.log("Lista Preenchida")
-                for (k =0; k < vlroption.length; k = k + 1){
-                            if(vlroption[k].match(contr)){
-                            //console.log(vlroption[k])
-                            
-                        //insere os itens no select option
-                        var option = new Option(vlroption[k], vlroption[k]);
-                                var select = document.getElementById("aqui3");
-                                select.add(option);
-                    }
-                }
-			}   
+        //console.log('impressao lista contatos languagesList')
+        //console.log(languagesList) 
 
-            //insere o código do contato no respectivo input
-            function update2(){
-                var select = document.getElementById('aqui'); 
-				var option = select.options[select.selectedIndex];
-                var novo= option.text.split("-").pop()
-                document.getElementById('atualiza').value= novo;
+        //pega o select referente ao contato
+        var select = document.getElementById("list2");
 
-                 //busca valor sla
-                var select = document.getElementById('list5');                                              
-				var option = select.options[select.selectedIndex];
-                document.getElementById('sla').value = option.id
-                var priori = option.id
+        //cria uma lista vazia 
+        var vlroption = []
 
-                //busca valor categoria
-                var select = document.getElementById('list6');                                              
-				var option = select.options[select.selectedIndex];
-                document.getElementById('categoria').value = option.id
-                var priori = option.id
+        //le o select e pega somente os valores e adiciona em uma nova lista                
+        for (i = 0; i < select.length; i = i + 1) {
+            vlroption.push(select.options[i].value)
+        }
+
+        // altera o contato a medida que muda localidade.
+        var sel = document.getElementById('aqui');
+        for (i = sel.length - 1; i >= 0; i--) {
+            sel.options.remove(i);
+        }
+
+        //le os dados que foram armazenados e insere na lista
+        //console.log("Lista Preenchida")
+        for (k = 0; k < vlroption.length; k = k + 1) {
+            //console.log(vlroption[k])
+            if (vlroption[k].match(contr)) {
+                //console.log(vlroption[k])
+
+                //insere os itens no select option
+                var option = new Option(vlroption[k], vlroption[k]);
+                var select = document.getElementById("aqui");
+                select.add(option);
             }
+        }
 
-            //insere o código do serviço no respectivo input
-            //function update3(){
-            //    var select = document.getElementById('aqui3'); 
-			//	var option = select.options[select.selectedIndex];
-            //    var novo= option.text.split("-").pop()
-            //    document.getElementById('codserv').value= novo;
-            //}
+        //pega o select referente ao produto
+        var select = document.getElementById("list3");
+        //cria uma lista vazia 
+        var vlroption = []
 
-            //insere o código do produto no respectivo input
-            function update4(){
-                var select = document.getElementById('aqui2'); 
-				var option = select.options[select.selectedIndex];
-                var novo= option.text.split("-").pop()
-                document.getElementById('codprod').value= novo;
-            }            
-		</script>
+        //le o select e pega somente os valores e adiciona em uma nova lista
+        for (i = 0; i < select.length; i = i + 1) {
+            vlroption.push(select.options[i].value)
+        }
+
+        // altera o contato a medida que muda produto.
+        var sel = document.getElementById('aqui2');
+        for (i = sel.length - 1; i >= 0; i--) {
+            sel.options.remove(i);
+        }
+
+        //le os dados que foram armazenados e insere na lista
+        // console.log("Lista Preenchida")
+        for (k = 0; k < vlroption.length; k = k + 1) {
+            if (vlroption[k].match(contr)) {
+                //console.log(vlroption[k])
+
+                //insere os itens no select option
+                var option = new Option(vlroption[k], vlroption[k]);
+                var select = document.getElementById("aqui2");
+                select.add(option);
+            }
+        }
+
+
+        //pega o select referente ao serviço
+        var select = document.getElementById("list4");
+        //cria uma lista vazia 
+        var vlroption = []
+
+        //le o select e pega somente os valores e adiciona em uma nova lista
+        for (i = 0; i < select.length; i = i + 1) {
+            vlroption.push(select.options[i].value)
+        }
+
+        // altera o contato a medida que muda produto.
+        var sel = document.getElementById('aqui3');
+        for (i = sel.length - 1; i >= 0; i--) {
+            sel.options.remove(i);
+        }
+
+        //le os dados que foram armazenados e insere na lista
+        //console.log("Lista Preenchida")
+        for (k = 0; k < vlroption.length; k = k + 1) {
+            if (vlroption[k].match(contr)) {
+                //console.log(vlroption[k])
+
+                //insere os itens no select option
+                var option = new Option(vlroption[k], vlroption[k]);
+                var select = document.getElementById("aqui3");
+                select.add(option);
+            }
+        }
+    }
+
+    //insere o código do contato no respectivo input
+    function update2() {
+        var select = document.getElementById('aqui');
+        var option = select.options[select.selectedIndex];
+        var novo = option.text.split("-").pop()
+        document.getElementById('atualiza').value = novo;
+
+        //busca valor sla
+        var select = document.getElementById('list5');
+        var option = select.options[select.selectedIndex];
+        document.getElementById('sla').value = option.id
+        var priori = option.id
+
+        //busca valor categoria
+        var select = document.getElementById('list6');
+        var option = select.options[select.selectedIndex];
+        document.getElementById('categoria').value = option.id
+        var priori = option.id
+    }
+
+    //insere o código do serviço no respectivo input
+    //function update3(){
+    //    var select = document.getElementById('aqui3'); 
+    //	var option = select.options[select.selectedIndex];
+    //    var novo= option.text.split("-").pop()
+    //    document.getElementById('codserv').value= novo;
+    //}
+
+    //insere o código do produto no respectivo input
+    function update4() {
+        var select = document.getElementById('aqui2');
+        var option = select.options[select.selectedIndex];
+        var novo = option.text.split("-").pop()
+        document.getElementById('codprod').value = novo;
+    }            
+</script>
