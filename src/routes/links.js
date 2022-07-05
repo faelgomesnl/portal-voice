@@ -27,7 +27,6 @@ const upload = multer({
     }
 });
 
-
 const pool = require('../database');
 const {
     isLoggedIn
@@ -190,6 +189,7 @@ router.post('/orderserv', isLoggedIn, upload.single('file'), async (req, res) =>
     const links = await pool.query('select top (1) NUMOS +1 as NUMOS from sankhya.TCSOSE order by numos desc');
     const numos = Object.values(links.recordset[0])
 
+    const idlogin = req.user.CODLOGIN
     const texto = req.body.texto;
     const filetoupload = upload
     /* const filetoupload = req.file.filename;
@@ -201,6 +201,7 @@ router.post('/orderserv', isLoggedIn, upload.single('file'), async (req, res) =>
     const contato = req.body.atualiza;
     const slccont = req.body.sla;
     const cart = req.body.carteira;
+    const userlog = req.body.loginuser;
 
     const t1 = texto
     const textofin = t1.replace("'", "`");
@@ -479,12 +480,13 @@ router.post('/orderserv', isLoggedIn, upload.single('file'), async (req, res) =>
     AND PRIORIDADE =1`);
     const prioridade = Object.values(links2.recordset[0])
 
-    await pool.query(`INSERT INTO sankhya.TCSOSE (NUMOS,NUMCONTRATO,DHCHAMADA,DTPREVISTA,CODPARC,CODCONTATO,CODATEND,CODUSURESP,DESCRICAO,SITUACAO,CODCOS,CODCENCUS,CODOAT,POSSUISLA) VALUES 
-    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'S');`);
+    await pool.query(`INSERT INTO sankhya.TCSOSE (NUMOS,NUMCONTRATO,DHCHAMADA,DTPREVISTA,CODPARC,CODCONTATO,CODATEND,CODUSURESP,DESCRICAO,SITUACAO,CODCOS,CODCENCUS,CODOAT,AD_LOGIN,POSSUISLA) VALUES 
+    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'${userlog}','S');
 
-    await pool.query(`INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
-    ('${numos}',1,40408,'${produto}',965,'${cart}',965,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',1);`);
-
+    INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
+    ('${numos}',1,40408,'${produto}',965,'${cart}',965,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',1);
+    
+    UPDATE sankhya.AD_TBLOGIN SET ULTIMO_ACESSO = GETDATE() WHERE CODLOGIN =${idlogin}`);
 
     req.flash('success', 'Ordem De Serviço Criada com Sucesso!!!! Nº ', numos)
     res.redirect('/links')
@@ -595,6 +597,7 @@ router.post('/order-algar', isLoggedIn, upload.single('file'), async (req, res) 
     const links = await pool.query('select top (1) NUMOS +1 as NUMOS from sankhya.TCSOSE order by numos desc');
     const numos = Object.values(links.recordset[0])
 
+    const idlogin = req.user.CODLOGIN
     const texto = req.body.texto;
     const filetoupload = upload
     /* const filetoupload = req.file.filename;
@@ -607,6 +610,7 @@ router.post('/order-algar', isLoggedIn, upload.single('file'), async (req, res) 
     const slccont = req.body.sla;
     const cart = req.body.carteira;
     const listacat = req.body.categoria;
+    const userlog = req.body.loginuser;
 
     const t1 = texto
     const textofin = t1.replace("'", "`");
@@ -890,12 +894,13 @@ router.post('/order-algar', isLoggedIn, upload.single('file'), async (req, res) 
     AND PRIORIDADE ='${slccont}'`);
     const prioridade = Object.values(links2.recordset[0])
 
-    await pool.query(`INSERT INTO sankhya.TCSOSE (NUMOS,NUMCONTRATO,DHCHAMADA,DTPREVISTA,CODPARC,CODCONTATO,CODATEND,CODUSURESP,DESCRICAO,SITUACAO,CODCOS,CODCENCUS,CODOAT,POSSUISLA,AD_LISTACATEGORIA) VALUES 
-    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'S','${listacat}');`);
-
-    await pool.query(`INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
-    ('${numos}',1,40408,'${produto}',965,'${cart}',110,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',${slccont});`);
-
+    await pool.query(`INSERT INTO sankhya.TCSOSE (NUMOS,NUMCONTRATO,DHCHAMADA,DTPREVISTA,CODPARC,CODCONTATO,CODATEND,CODUSURESP,DESCRICAO,SITUACAO,CODCOS,CODCENCUS,CODOAT,AD_LOGIN,POSSUISLA,AD_LISTACATEGORIA) VALUES 
+    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'${userlog}','S','${listacat}');
+    
+    INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
+    ('${numos}',1,40408,'${produto}',965,'${cart}',110,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',${slccont});
+    
+    UPDATE sankhya.AD_TBLOGIN SET ULTIMO_ACESSO = GETDATE() WHERE CODLOGIN =${idlogin}`);
 
     req.flash('success', 'Ordem De Serviço Criada com Sucesso!!!! Nº ', numos)
     res.redirect('/links')
@@ -1308,11 +1313,12 @@ router.post('/orderservs', isLoggedIn, upload.single('file'), async (req, res) =
     const prioridade = Object.values(links2.recordset[0])
 
     await pool.query(`INSERT INTO sankhya.TCSOSE (NUMOS,NUMCONTRATO,DHCHAMADA,DTPREVISTA,CODPARC,CODCONTATO,CODATEND,CODUSURESP,DESCRICAO,SITUACAO,CODCOS,CODCENCUS,CODOAT,POSSUISLA,AD_LISTACATEGORIA) VALUES 
-    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'S','${listacat}');`);
+    ('${numos}','${contrato}',GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),'${parceiro}','${contato}',110,110,'${textofin}','P','',30101,1000000,'S','${listacat}');
+    
+    INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
+    ('${numos}',1,40408,'${produto}',965,'${cart}',110,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',${slccont});
 
-    await pool.query(`INSERT INTO SANKHYA.TCSITE (NUMOS,NUMITEM,CODSERV,CODPROD,CODUSU,CODOCOROS,CODUSUREM,DHENTRADA,DHPREVISTA,CODSIT,COBRAR,RETRABALHO,PRIORIDADE) VALUES 
-    ('${numos}',1,40408,'${produto}',965,'${cart}',110,GETDATE(),(SELECT DATEADD(MI,${prioridade},GETDATE())),15,'N','N',${slccont});`);
-
+    UPDATE sankhya.AD_TBLOGIN SET ULTIMO_ACESSO = GETDATE() WHERE CODLOGIN =${idlogin}`);
 
     req.flash('success', 'Ordem De Serviço Criada com Sucesso!!!! Nº ', numos)
     res.redirect('/links')
@@ -1375,8 +1381,9 @@ router.get('/osclose', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
     C.NUMCONTRATO, 
-    P.NOMEPARC,  
-    C.AD_LOCALIDADE,    
+    P.NOMEPARC,
+    CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,  
+    --C.AD_LOCALIDADE,    
     O.NUMOS, 
     OP.OPCAO,
     I.NUMITEM,
@@ -1434,8 +1441,9 @@ router.get('/osclose2', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
     C.NUMCONTRATO, 
-    P.NOMEPARC,  
-    C.AD_LOCALIDADE,    
+    P.NOMEPARC,
+    CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,  
+    --C.AD_LOCALIDADE,    
     O.NUMOS, 
     OP.OPCAO,
     I.NUMITEM,
@@ -1495,8 +1503,9 @@ router.get('/all', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
     C.NUMCONTRATO, 
-    P.NOMEPARC,    
-    C.AD_LOCALIDADE,  
+    P.NOMEPARC,
+    CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,    
+    --C.AD_LOCALIDADE,  
     O.NUMOS,
     OP.OPCAO,    
     (CASE O.SITUACAO WHEN 'F' THEN 'Fechada'ELSE 'Aberta' END) AS SITUACAO, 
@@ -1582,14 +1591,11 @@ router.get('/edit/:id', isLoggedIn, async (req, res) => {
     res.render('links/edit', {
         lista: links.recordset[0]
     })
-    /*//req.flash('success', 'Link Removed Successfully');
-    res.redirect('/links'); */
 });
 
 //update
 //ADICIONAR CONTRATOS AOS NOVOS USUÁRIOS, SOMENTE ADMIN
 router.get('/password', isLoggedIn, async (req, res) => {
-
 
     res.render('links/passwords')
 });
@@ -1599,13 +1605,6 @@ router.get('/password', isLoggedIn, async (req, res) => {
 router.post('/password', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const contrato = req.body.contrato;
-
-    /* console.log('contrato')
-    console.log(contrato)
-
-    console.log('login')
-    console.log(idlogin) */
-
     pool.query(`UPDATE sankhya.AD_TBLOGIN
             SET SENHA = '${contrato}'
             WHERE CODLOGIN = '${idlogin}'`);

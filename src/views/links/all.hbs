@@ -58,7 +58,7 @@
                                 <th data-field="execucao">Situação</th>                           
                                 <th data-field="defeitos" data-editable="true">Descrição</th>
                                 <th data-field="solucao" data-editable="true">Solução</th> 
-                                <th data-field="executante" data-editable="true">Executante</th> 
+                              {{!--   <th data-field="executante" data-editable="true">Executante</th>  --}}
                                 <th data-field="defeito" data-editable="true">Status</th>                
                             </tr>
                         </thead>
@@ -80,7 +80,7 @@
                             <td>{{STS}}</td>
                             <td>{{DEFEITO}}</td>
                             <td>{{SOLUCAO}}</td>
-                            <td>{{EXECUTANTE}}</td>
+                            {{!-- <td>{{EXECUTANTE}}</td> --}}
                              <td>{{DESCRICAO}}</td>                    
                             </tr>
                         {{/each}}
@@ -129,7 +129,7 @@
                                 <th data-field="execucao">Situação</th>                           
                                 <th data-field="defeitos" data-editable="true">Descrição</th>
                                 <th data-field="solucao" data-editable="true">Solução</th> 
-                                <th data-field="executante" data-editable="true">Executante</th> 
+                              {{!--   <th data-field="executante" data-editable="true">Executante</th>  --}}
                                 <th data-field="defeito" data-editable="true">Status</th>                
                             </tr>
                         </thead>
@@ -138,7 +138,7 @@
                             <tr>
                             <td></td> 
                             <td>{{NUMCONTRATO}}</td>                      
-                            <td>{{NOMEPARC}}</td>                      
+                            <td>{{AD_LOCALIDADE}}</td>                      
                             <td>{{NUMOS}}</td> 
                             <td>{{SITUACAO}}</td>                             
                             <td hidden>{{PRIORIDADE}}</td> 
@@ -151,7 +151,7 @@
                             <td>{{STS}}</td>
                             <td>{{DEFEITO}}</td>
                             <td>{{SOLUCAO}}</td>
-                            <td>{{EXECUTANTE}}</td>
+                            {{!-- <td>{{EXECUTANTE}}</td> --}}
                              <td>{{DESCRICAO}}</td>                    
                             </tr>
                 {{/each}}

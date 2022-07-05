@@ -30,7 +30,7 @@ Descrição do Pedido:</textarea>
                                 {{#each geral}}
                                 <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
                                     ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}"
-                                    ren4="{{AD_LOCALIDADE}}" ren5="{{CARTEIRA}}">
+                                    ren4="{{AD_LOCALIDADE}}" ren5="{{CARTEIRA}}" ren6="{{ID_LOGIN}}">
                                     {{NOMEPARC}} - {{AD_LOCALIDADE}}
                                 </option>
                                 {{/each}}
@@ -116,6 +116,7 @@ Descrição do Pedido:</textarea>
                             <input hidden id="sla" name="sla" required>
                             <input hidden id="categoria" name="categoria" required>
                             <input hidden id="carteira" name="carteira" required>
+                            <input  id="loginuser" name="loginuser">
 
                             {{!-- exibição enderaço --}}
                             <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
@@ -167,7 +168,7 @@ Problema :
                                 {{#each geral}}
                                 <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
                                     ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}" ren4="{{NOMEPARC}}"
-                                    ren5="{{CARTEIRA}}">
+                                    ren5="{{CARTEIRA}}" ren6="{{ID_LOGIN}}">
                                     {{NOMEPARC}} - {{AD_LOCALIDADE}}
                                 </option>
                                 {{/each}}
@@ -238,6 +239,7 @@ Problema :
                             <input hidden id="atualiza" name="atualiza" required>
                             <input hidden id="sla" name="sla">
                             <input hidden id="carteira" name="carteira" required>
+                            <input  id="loginuser" name="loginuser">
 
                             {{!-- exibição enderaço --}}
                             <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
@@ -283,7 +285,7 @@ Problema :
                                 {{#each geral}}
                                 <option value="{{NUM_CONTRATO}}" id="{{CODPARC}}" title="{{CODPROD}}"
                                     ren="{{VALORTEMPO}}" ren2="{{CIDADE}}" ren3="{{LOGRADOURO}}" ren4="{{NOMEPARC}}"
-                                    ren5="{{CARTEIRA}}">
+                                    ren5="{{CARTEIRA}}" ren6="{{ID_LOGIN}}">
                                     {{NOMEPARC}} - {{AD_LOCALIDADE}}
                                 </option>
                                 {{/each}}
@@ -345,6 +347,7 @@ Problema :
                             <input hidden id="atualiza" name="atualiza" required>
                             <input hidden id="sla" name="sla">
                             <input hidden id="carteira" name="carteira" required>
+                            <input  id="loginuser" name="loginuser">
 
                             {{!-- exibição enderaço --}}
                             <input type="text" id="cidade" name="cidade" disabled="disabled" style='width:100%'>
@@ -406,9 +409,11 @@ Problema :
 
         var ren = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren');
         var ren5 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren5');
+        var ren6 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren6');
 
         document.getElementById('sla').value = ren
         document.getElementById('carteira').value = ren5
+        document.getElementById('loginuser').value = ren6
 
         //lista endereço da localidade escolhida
         var ren2 = document.forms['frm_'].elements['list'].options[document.forms['frm_'].elements['list'].selectedIndex].getAttribute('ren2');
