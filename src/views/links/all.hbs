@@ -45,6 +45,7 @@
                             <tr>
                                 <th data-field="contrato" data-editable="true"></th>
                                 <th data-field="contrato" data-editable="true">Contrato</th>
+                                {{!-- <th data-field="usuario" data-editable="true">Usuário</th> --}}
                                 <th data-field="parceiro">Parceiro</th>                        
                                 <th data-field="os" data-editable="true">OS</th>
                                 <th data-field="os" data-editable="true">Situação</th>
@@ -66,7 +67,8 @@
                         {{#each lista}}
                             <tr>
                             <td></td> 
-                            <td>{{NUMCONTRATO}}</td>                      
+                            <td>{{NUMCONTRATO}}</td> 
+                            {{!-- <td>{{USUARIO}}</td>   --}}                   
                             <td>{{AD_LOCALIDADE}}</td>                      
                             <td>{{NUMOS}}</td> 
                             <td>{{SITUACAO}}</td>                             
@@ -116,6 +118,7 @@
                         <tr>
                                 <th data-field="contrato" data-editable="true"></th>
                                 <th data-field="contrato" data-editable="true">Contrato</th>
+                                <th data-field="usuario" data-editable="true">Usuário</th>
                                 <th data-field="parceiro">Parceiro</th>                        
                                 <th data-field="os" data-editable="true">OS</th>
                                 <th data-field="os" data-editable="true">Situação</th>
@@ -137,7 +140,8 @@
                         {{#each lista}}
                             <tr>
                             <td></td> 
-                            <td>{{NUMCONTRATO}}</td>                      
+                            <td>{{NUMCONTRATO}}</td> 
+                            <td>{{USUARIO}}</td>                     
                             <td>{{AD_LOCALIDADE}}</td>                      
                             <td>{{NUMOS}}</td> 
                             <td>{{SITUACAO}}</td>                             

@@ -91,52 +91,72 @@ router.get('/orderserv', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
 
     //contrato
-    const links = await pool.query(`SELECT DISTINCT L.NUM_CONTRATO, PAR.NOMEPARC,CON.AD_LOCALIDADE,
-    PAR.CODPARC,  CON.CODUSUOS , L.ID_LOGIN,
-    CON.AD_CIRCUITO,
-    CD.NOMECID AS CIDADE,
-    (CONVERT(VARCHAR(45),EN.NOMEEND,103)) as LOGRADOURO,
-    CASE
-         WHEN CON.AD_CODOCOROS IS NULL THEN 900
-         ELSE CON.AD_CODOCOROS
-       END AS CARTEIRA
+    const links = await pool.query(`SELECT DISTINCT
+        L.NUM_CONTRATO, L.ID_LOGIN AS LOGADO, SLA.CODCARGAHOR, PAR.NOMEPARC,
+        CASE WHEN CON.AD_LOCALIDADE IS NOT NULL  THEN UPPER (CON.AD_LOCALIDADE)
+        ELSE UPPER (PAR.NOMEPARC) END AS AD_LOCALIDADE,
+        --CON.AD_LOCALIDADE,
+        CON.AD_TSOLUCAO,
+        CASE WHEN (CON.CODPARCSEC IS NULL OR CON.CODPARCSEC = 0) THEN PAR.CODPARC
+        ELSE CON.CODPARCSEC END AS CODPARC,
+        CON.CODUSUOS , L.ID_LOGIN,
+        CON.AD_CIRCUITO,
+        CD.NOMECID AS CIDADE,
+        (CONVERT(VARCHAR(45),EN.NOMEEND,103)) as LOGRADOURO,
+        CASE
+                WHEN CON.AD_CODOCOROS IS NULL THEN 900
+                ELSE CON.AD_CODOCOROS
+            END AS CARTEIRA,
+        UF1.CODUF AS UFCONT
     FROM sankhya.AD_TBACESSO L
-    INNER JOIN sankhya.TCSCON CON ON (L.NUM_CONTRATO = CON.NUMCONTRATO)
-    INNER JOIN sankhya.TGFPAR PAR ON (PAR.CODPARC = CON.CODPARC) 
-    INNER JOIN sankhya.TCSPSC PS ON (CON.NUMCONTRATO=PS.NUMCONTRATO)
-    INNER JOIN sankhya.TGFPRO PD ON (PD.CODPROD=PS.CODPROD)
-    INNER JOIN sankhya.TGFCTT C ON (PAR.CODPARC=C.CODPARC)
-    LEFT JOIN sankhya.TCSSLA SLA ON (SLA.NUSLA = CON.NUSLA)
-    LEFT JOIN sankhya.TCSRSL TC ON (SLA.NUSLA=TC.NUSLA)
-    LEFT JOIN sankhya.TSIBAI BR ON (PAR.CODBAI=BR.CODBAI)
-    LEFT JOIN sankhya.TSICID CD ON (CD.CODCID=PAR.CODCID)
-    LEFT JOIN sankhya.TSIEND EN ON (EN.CODEND=PAR.CODEND)
-    LEFT JOIN sankhya.TSIUFS UF ON (UF.UF=CD.UF)
-    LEFT JOIN sankhya.TFPLGR LG ON (LG.CODLOGRADOURO=EN.CODLOGRADOURO)
-    WHERE L.ID_LOGIN = ${idlogin}
-    AND CON.ATIVO = 'S'
-    AND PS.SITPROD IN ('A','B')
-    AND PD.USOPROD IN ('S', 'R')
-    AND TC.PRIORIDADE IS NULL
-    ORDER BY CON.AD_CIRCUITO`);
+        INNER JOIN sankhya.TCSCON CON ON (L.NUM_CONTRATO = CON.NUMCONTRATO)
+        INNER JOIN sankhya.TGFPAR PAR ON (PAR.CODPARC = CON.CODPARC)
+        INNER JOIN sankhya.TCSPSC PS ON (CON.NUMCONTRATO=PS.NUMCONTRATO)
+        INNER JOIN sankhya.TGFPRO PD ON (PD.CODPROD=PS.CODPROD)
+        INNER JOIN sankhya.TGFCTT C ON (PAR.CODPARC=C.CODPARC)
+        LEFT JOIN sankhya.TCSSLA SLA ON (SLA.NUSLA = CON.NUSLA)
+        LEFT JOIN sankhya.TCSRSL TC ON (SLA.NUSLA=TC.NUSLA)
+        LEFT JOIN sankhya.TSIBAI BR ON (PAR.CODBAI=BR.CODBAI)
+        LEFT JOIN sankhya.TSICID CD ON (CD.CODCID=PAR.CODCID)
+        LEFT JOIN sankhya.TSIEND EN ON (EN.CODEND=PAR.CODEND)
+        LEFT JOIN sankhya.TSIUFS UF ON (UF.UF=CD.UF)
+        LEFT JOIN sankhya.TFPLGR LG ON (LG.CODLOGRADOURO=EN.CODLOGRADOURO)
+        FULL OUTER JOIN sankhya.TSICID CD1 ON (CON.CODCID = CD1.CODCID)
+        FULL OUTER JOIN sankhya.TSIUFS UF1 ON (CD.UF = UF1.CODUF)
+    WHERE L.ID_LOGIN =${idlogin}
+        AND CON.ATIVO = 'S'
+        AND PS.SITPROD IN ('A','B')
+        AND PD.USOPROD IN ('S', 'R')
+        AND (PD.USOPROD ='S' AND PS.SITPROD <>'S')
+        AND TC.PRIORIDADE IS NULL
+        GROUP BY CON.AD_LOCALIDADE, L.NUM_CONTRATO,PAR.NOMEPARC,PAR.CODPARC,  CON.CODUSUOS , L.ID_LOGIN,CON.AD_TSOLUCAO,   
+        CON.AD_CIRCUITO,    CD.NOMECID, CON.AD_CODOCOROS,EN.NOMEEND,SLA.CODCARGAHOR, CON.CODPARCSEC, UF1.CODUF
+    ORDER BY AD_LOCALIDADE`);
 
     //contatos
-    const links2 = await pool.query(`SELECT DISTINCT 
-    UPPER  (CONVERT(VARCHAR(30),c.NOMECONTATO,103))+' - '+CONVERT(VARCHAR(30),con.NUMCONTRATO,103)+' -'+
-    CONVERT(VARCHAR(30),c.CODCONTATO,103) as CONTATO,
-    c.CODCONTATO AS CODCONT,
-    UPPER  (CONVERT(VARCHAR(30),c.NOMECONTATO,103)) as NOME
+    const links2 = await pool.query(`SELECT DISTINCT
+    CASE WHEN 
+        (CON.CODPARCSEC IS NULL OR CON.CODPARCSEC = 0) 
+        THEN UPPER  (CONVERT(VARCHAR(30),c.NOMECONTATO,103))+' - '+CONVERT(VARCHAR(30),con.NUMCONTRATO,103)+' -'+CONVERT(VARCHAR(30),c.CODCONTATO,103)
+        ELSE UPPER  (CONVERT(VARCHAR(30),c2.NOMECONTATO,103))+' - '+CONVERT(VARCHAR(30),con.NUMCONTRATO,103)+' -'+CONVERT(VARCHAR(30),c2.CODCONTATO,103)
+    END AS CONTATO,
+    CASE WHEN 
+        (CON.CODPARCSEC IS NULL OR CON.CODPARCSEC = 0) 
+        THEN c.CODCONTATO ELSE c2.CODCONTATO END AS CODCONT,
+    CASE WHEN 
+        (CON.CODPARCSEC IS NULL OR CON.CODPARCSEC = 0) 
+        THEN  UPPER  (CONVERT(VARCHAR(30),c.NOMECONTATO,103))
+        ELSE  UPPER  (CONVERT(VARCHAR(30),c2.NOMECONTATO,103))
+    END AS NOME
     from sankhya.TGFPAR P
-    INNER JOIN sankhya.TGFCTT C ON (P.CODPARC=C.CODPARC)
-    INNER JOIN sankhya.TCSCON CON ON (P.CODPARC = CON.CODPARC)
-    inner join sankhya.AD_TBACESSO L ON (L.NUM_CONTRATO = CON.NUMCONTRATO)
-    INNER JOIN sankhya.TCSPSC PS ON (CON.NUMCONTRATO=PS.NUMCONTRATO)
-    INNER JOIN sankhya.TGFPRO PD ON (PD.CODPROD=PS.CODPROD)
+        INNER JOIN sankhya.TGFCTT C ON (P.CODPARC=C.CODPARC)
+        INNER JOIN sankhya.TCSCON CON ON (P.CODPARC = CON.CODPARC)
+        LEFT JOIN sankhya.TGFPAR P2 ON (CON.CODPARCSEC=P2.CODPARC)
+        INNER JOIN sankhya.TGFCTT C2 ON (P2.CODPARC=C2.CODPARC)
+        inner join sankhya.AD_TBACESSO L ON (L.NUM_CONTRATO = CON.NUMCONTRATO)
     WHERE L.ID_LOGIN = ${idlogin}
-    AND CON.ATIVO = 'S'
-    AND C.ATIVO = 'S'
-    AND PS.SITPROD IN ('A','B')
-    AND PD.USOPROD IN ('S', 'R')
+        AND CON.ATIVO = 'S'
+        AND C.ATIVO = 'S'
     order by CONTATO`);
 
     //serviços
@@ -499,7 +519,7 @@ router.get('/order-algar', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
 
     //contrato
-    const links = await pool.query(`SELECT DISTINCT L.NUM_CONTRATO, PAR.NOMEPARC,CON.AD_LOCALIDADE,
+    const links = await pool.query(`SELECT DISTINCT L.NUM_CONTRATO, PAR.NOMEPARC,UPPER (CON.AD_LOCALIDADE),
     PAR.CODPARC,  CON.CODUSUOS , L.ID_LOGIN,
     CON.AD_CIRCUITO,
     CD.NOMECID AS CIDADE,
@@ -525,6 +545,7 @@ router.get('/order-algar', isLoggedIn, async (req, res) => {
     AND CON.ATIVO = 'S'
     AND PS.SITPROD IN ('A','B')
     AND PD.USOPROD IN ('S', 'R')
+    AND (PD.USOPROD ='S' AND PS.SITPROD <>'S')
     AND TC.PRIORIDADE IS NULL
     ORDER BY CON.AD_CIRCUITO`);
 
@@ -913,7 +934,7 @@ router.get('/orderservs', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
 
     //contrato
-    const links = await pool.query(`SELECT DISTINCT L.NUM_CONTRATO, PAR.NOMEPARC,CON.AD_LOCALIDADE,
+    const links = await pool.query(`SELECT DISTINCT L.NUM_CONTRATO, UPPER (PAR.NOMEPARC),UPPER (CON.AD_LOCALIDADE),
     PAR.CODPARC,  CON.CODUSUOS , L.ID_LOGIN,
     CON.AD_CIRCUITO,
     CD.NOMECID AS CIDADE,
@@ -939,6 +960,7 @@ router.get('/orderservs', isLoggedIn, async (req, res) => {
     AND CON.ATIVO = 'S'
     AND PS.SITPROD IN ('A','B')
     AND PD.USOPROD IN ('S', 'R')
+    AND (PD.USOPROD ='S' AND PS.SITPROD <>'S')
     AND TC.PRIORIDADE IS NULL
     ORDER BY CON.AD_CIRCUITO`);
 
@@ -1017,6 +1039,7 @@ router.post('/orderservs', isLoggedIn, upload.single('file'), async (req, res) =
     const links = await pool.query('select top (1) NUMOS +1 as NUMOS from sankhya.TCSOSE order by numos desc');
     const numos = Object.values(links.recordset[0])
 
+    const idlogin = req.user.CODLOGIN
     const texto = req.body.texto;
     const filetoupload = upload
     /* const filetoupload = req.file.filename;
@@ -1330,7 +1353,8 @@ router.post('/orderservs', isLoggedIn, upload.single('file'), async (req, res) =
 router.get('/', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
-    C.NUMCONTRATO, 
+    C.NUMCONTRATO,
+    CASE WHEN L.NOMEUSU IS NULL THEN '-' ELSE L.NOMEUSU END AS USUARIO, 
     P.NOMEPARC, 
     C.AD_LOCALIDADE,   
     O.NUMOS, 
@@ -1354,6 +1378,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     LEFT JOIN sankhya.TDDOPC OP ON (O.AD_LISTACATEGORIA = OP.VALOR)
     INNER JOIN sankhya.TCSCON C ON (C.NUMCONTRATO=O.NUMCONTRATO)
     INNER JOIN sankhya.AD_TBACESSO AC ON (C.NUMCONTRATO=AC.NUM_CONTRATO)
+    LEFT JOIN sankhya.AD_TBLOGIN L ON (O.AD_LOGIN=L.CODLOGIN)
     INNER JOIN sankhya.TGFPAR P ON (P.CODPARC=C.CODPARC)
     INNER JOIN sankhya.TCSITE I ON (O.NUMOS=I.NUMOS)
     INNER JOIN SANKHYA.TSIUSU USU ON (USU.CODUSU = I.CODUSU)
@@ -1381,6 +1406,7 @@ router.get('/osclose', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
     C.NUMCONTRATO, 
+    CASE WHEN L.NOMEUSU IS NULL THEN '-' ELSE L.NOMEUSU END AS USUARIO,
     P.NOMEPARC,
     CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,  
     --C.AD_LOCALIDADE,    
@@ -1411,6 +1437,7 @@ router.get('/osclose', isLoggedIn, async (req, res) => {
     LEFT JOIN sankhya.TDDOPC OP ON (O.AD_LISTACATEGORIA = OP.VALOR)
     INNER JOIN sankhya.TCSCON C ON (C.NUMCONTRATO=O.NUMCONTRATO)
     INNER JOIN sankhya.AD_TBACESSO AC ON (C.NUMCONTRATO=AC.NUM_CONTRATO)
+    LEFT JOIN sankhya.AD_TBLOGIN L ON (O.AD_LOGIN=L.CODLOGIN)
     INNER JOIN sankhya.TGFPAR P ON (P.CODPARC=C.CODPARC)
     INNER JOIN sankhya.TCSITE I ON (O.NUMOS=I.NUMOS)
     INNER JOIN sankhya.TSIUSU     ON (TSIUSU.CODUSU = O.CODUSUFECH)
@@ -1441,6 +1468,7 @@ router.get('/osclose2', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
     C.NUMCONTRATO, 
+    CASE WHEN L.NOMEUSU IS NULL THEN '-' ELSE L.NOMEUSU END AS USUARIO,
     P.NOMEPARC,
     CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,  
     --C.AD_LOCALIDADE,    
@@ -1471,6 +1499,7 @@ router.get('/osclose2', isLoggedIn, async (req, res) => {
     LEFT JOIN sankhya.TDDOPC OP ON (O.AD_LISTACATEGORIA = OP.VALOR)
     INNER JOIN sankhya.TCSCON C ON (C.NUMCONTRATO=O.NUMCONTRATO)
     INNER JOIN sankhya.AD_TBACESSO AC ON (C.NUMCONTRATO=AC.NUM_CONTRATO)
+    LEFT JOIN sankhya.AD_TBLOGIN L ON (O.AD_LOGIN=L.CODLOGIN)
     INNER JOIN sankhya.TGFPAR P ON (P.CODPARC=C.CODPARC)
     INNER JOIN sankhya.TCSITE I ON (O.NUMOS=I.NUMOS)
     INNER JOIN sankhya.TSIUSU     ON (TSIUSU.CODUSU = O.CODUSUFECH)
@@ -1502,7 +1531,8 @@ router.get('/osclose2', isLoggedIn, async (req, res) => {
 router.get('/all', isLoggedIn, async (req, res) => {
     const idlogin = req.user.CODLOGIN
     const links = await pool.query(`SELECT 
-    C.NUMCONTRATO, 
+    C.NUMCONTRATO,
+    CASE WHEN L.NOMEUSU IS NULL THEN '-' ELSE L.NOMEUSU END AS USUARIO, 
     P.NOMEPARC,
     CASE WHEN (C.AD_LOCALIDADE IS NULL AND P.NOMEPARC = 'ALGAR TELECOM') THEN P.NOMEPARC ELSE C.AD_LOCALIDADE END AS AD_LOCALIDADE,    
     --C.AD_LOCALIDADE,  
@@ -1537,6 +1567,7 @@ router.get('/all', isLoggedIn, async (req, res) => {
     LEFT JOIN sankhya.TDDOPC OP ON (O.AD_LISTACATEGORIA = OP.VALOR)
     INNER JOIN sankhya.TCSCON C ON (C.NUMCONTRATO=O.NUMCONTRATO)
     INNER JOIN sankhya.AD_TBACESSO AC ON (C.NUMCONTRATO=AC.NUM_CONTRATO)
+    LEFT JOIN sankhya.AD_TBLOGIN L ON (O.AD_LOGIN=L.CODLOGIN)
     INNER JOIN sankhya.TGFPAR P ON (P.CODPARC=C.CODPARC)
     INNER JOIN sankhya.TCSITE I ON (O.NUMOS=I.NUMOS)
     INNER JOIN sankhya.TSIUSU     ON (TSIUSU.CODUSU = O.CODUSUFECH)
